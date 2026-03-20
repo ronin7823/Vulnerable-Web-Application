@@ -1,0 +1,42 @@
+services:
+  app:
+    build: .
+    ports:
+      - "80:5000"
+    environment:
+      - FLASK_ENV=development
+      - SECRET_KEY=change-me-in-production
+      - DATABASE_URL=sqlite:////app/data/app.db
+      # --- Flags: one per intentional vulnerability ---
+      - FLAG_EXAMPLE=ENPM634{example_debug_info_disclosure}
+    volumes:
+      - ./app:/app/app      # live-reload: edits reflect without rebuild
+      - db_data:/app/data   # persists the SQLite database file
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # --- Optional: swap SQLite for PostgreSQL ---
+  # Uncomment the service below and change DATABASE_URL to:
+  #   postgresql://appuser:apppass@db:5432/appdb
+  #
+  # db:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_DB: appdb
+  #     POSTGRES_USER: appuser
+  #     POSTGRES_PASSWORD: apppass
+  #   volumes:
+  #     - pg_data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD", "pg_isready", "-U", "appuser", "-d", "appdb"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+volumes:
+  db_data:
+  # pg_data:

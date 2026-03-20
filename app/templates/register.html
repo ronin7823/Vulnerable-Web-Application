@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Register — PasteBoard{% endblock %}
+{% block content %}
+  <article style="max-width: 450px; margin: 0 auto;">
+    <h1>Register</h1>
+    <form method="POST">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required autofocus>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+      <button type="submit">Create Account</button>
+    </form>
+    <p>Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+  </article>
+{% endblock %}

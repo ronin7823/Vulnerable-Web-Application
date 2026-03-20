@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Profile — PasteBoard{% endblock %}
+{% block content %}
+  <h1>Profile</h1>
+  <section>
+    <p><strong>Username:</strong> {{ current_user.username }}</p>
+  </section>
+
+  <section>
+    <h2>Change Password</h2>
+    <form method="POST" action="{{ url_for('main.profile') }}">
+      <label for="old_password">Current Password</label>
+      <input id="old_password" name="old_password" type="password" required autocomplete="current-password" />
+
+      <label for="new_password">New Password</label>
+      <input id="new_password" name="new_password" type="password" required autocomplete="new-password" />
+
+      <label for="confirm_password">Confirm New Password</label>
+      <input id="confirm_password" name="confirm_password" type="password" required autocomplete="new-password" />
+
+      <button type="submit">Update Password</button>
+    </form>
+  </section>
+{% endblock %}

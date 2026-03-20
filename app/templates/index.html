@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Pastes — PasteBoard{% endblock %}
+{% block content %}
+  <h1>Recent Pastes</h1>
+  {% if current_user.is_authenticated %}
+    <p><a href="{{ url_for('main.new_paste') }}" role="button">+ New Paste</a></p>
+  {% endif %}
+
+  {% if pastes %}
+    {% for paste in pastes %}
+      <article>
+        <header>
+          <hgroup>
+            <h3>{{ paste.title }}</h3>
+            <p>by {{ paste.author.username }} &middot; <kbd>{{ paste.language }}</kbd></p>
+          </hgroup>
+        </header>
+        <pre><code>{{ paste.body }}</code></pre>
+
+        <section class="comments">
+          <div class="comments-title">
+            <h4>Comments</h4>
+            {% if current_user.is_authenticated %}
+              <button class="comment-icon" type="button" onclick="toggleCommentBox({{ paste.id }})">💬</button>
+            {% endif %}
+          </div>
+
+          {% if paste.comments %}
+            <ul>
+              {% for comment in paste.comments %}
+                <li>
+                  <strong>{{ comment.author.username }}</strong>
+                  <span class="comment-time">{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</span>:
+                  {{ comment.body }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p><em>No comments yet.</em></p>
+          {% endif %}
+
+          {% if current_user.is_authenticated %}
+            <form id="comment-box-{{ paste.id }}" class="comment-form hidden" method="POST" action="{{ url_for('main.add_comment', paste_id=paste.id) }}">
+              <textarea id="comment-{{ paste.id }}" name="comment" rows="2" placeholder="Type your comment" required></textarea>
+              <div class="form-actions">
+                <button type="submit" class="outline">Send</button>
+                <button type="button" class="secondary" onclick="toggleCommentBox({{ paste.id }})">Close</button>
+              </div>
+            </form>
+          {% else %}
+            <p><em><a href="{{ url_for('auth.login') }}">Login</a> to comment.</em></p>
+          {% endif %}
+        </section>
+
+        {% if current_user.is_authenticated and current_user.id == paste.user_id %}
+          <footer>
+            <form method="POST" action="{{ url_for('main.delete_paste', paste_id=paste.id) }}" style="display:inline;">
+              <button type="submit" class="outline secondary" onclick="return confirm('Delete this paste?')">Delete</button>
+            </form>
+          </footer>
+        {% endif %}
+      </article>
+    {% endfor %}
+  {% else %}
+    <p>No pastes yet. Be the first to share a snippet!</p>
+  {% endif %}
+{% endblock %}
