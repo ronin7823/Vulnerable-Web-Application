@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}CyberBlog — Home{% endblock %}
+{% block content %}
+
+<!-- Hero Banner -->
+<div style="text-align:center; padding: 3rem 0 2.5rem; margin-bottom: 3rem; position:relative;">
+  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:400px; height:400px; background:radial-gradient(ellipse, rgba(0,255,159,0.04) 0%, transparent 70%); pointer-events:none;"></div>
+  <p style="font-family:var(--font-mono); font-size:0.72rem; color:var(--neon-pink); letter-spacing:0.3em; text-transform:uppercase; margin-bottom:1rem; opacity:0.8;">// WELCOME TO THE GRID //</p>
+  <h1 style="font-family:var(--font-display); font-size:3.2rem; font-weight:900; letter-spacing:0.12em; line-height:1;">
+    <span style="color:var(--neon-green); text-shadow: 0 0 40px rgba(0,255,159,0.4);">CYBER</span><span style="color:var(--neon-pink); text-shadow: 0 0 40px rgba(255,0,170,0.4);">BLOG</span>
+  </h1>
+  <p style="font-family:var(--font-mono); font-size:0.78rem; color:var(--text-secondary); margin-top:0.8rem; letter-spacing:0.08em;">A COMMUNITY FOR SECURITY RESEARCHERS &amp; HACKERS</p>
+  <div style="display:flex; align-items:center; gap:1rem; margin-top:1.5rem; justify-content:center;">
+    <div style="width:60px; height:1px; background:linear-gradient(90deg, transparent, var(--neon-green));"></div>
+    <span style="font-family:var(--font-mono); font-size:0.65rem; color:var(--neon-green); letter-spacing:0.2em;">◆</span>
+    <div style="width:60px; height:1px; background:linear-gradient(90deg, var(--neon-green), transparent);"></div>
+  </div>
+  {% if not current_user.is_authenticated %}
+  <div style="margin-top:1.8rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+    <a href="{{ url_for('auth.login') }}" style="display:inline-block; padding:0.7rem 2rem; font-family:var(--font-mono); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.1em; border-radius:3px; text-decoration:none; border:1px solid var(--neon-green); color:var(--neon-green); transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,159,0.1)';this.style.boxShadow='0 0 20px rgba(0,255,159,0.25)'" onmouseout="this.style.background='transparent';this.style.boxShadow='none'">Access Terminal</a>
+    <a href="{{ url_for('auth.register') }}" style="display:inline-block; padding:0.7rem 2rem; font-family:var(--font-mono); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.1em; border-radius:3px; text-decoration:none; border:1px solid var(--text-secondary); color:var(--text-secondary); transition:all 0.2s;" onmouseover="this.style.borderColor='var(--neon-blue)';this.style.color='var(--neon-blue)'" onmouseout="this.style.borderColor='var(--text-secondary)';this.style.color='var(--text-secondary)'">New Identity</a>
+  </div>
+  {% else %}
+  <div style="margin-top:1.8rem;">
+    <a href="{{ url_for('main.new_paste') }}" style="display:inline-block; padding:0.7rem 2rem; font-family:var(--font-mono); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.1em; border-radius:3px; text-decoration:none; border:1px solid var(--neon-green); color:var(--neon-green); transition:all 0.2s;" onmouseover="this.style.background='rgba(0,255,159,0.1)'" onmouseout="this.style.background='transparent'">+ New Post</a>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Section header -->
+<div style="display:flex; align-items:center; gap:1rem; margin-bottom:2rem;">
+  <div style="flex:1; height:1px; background:linear-gradient(90deg, var(--neon-blue), transparent);"></div>
+  <p style="font-family:var(--font-mono); font-size:0.72rem; color:var(--neon-blue); text-transform:uppercase; letter-spacing:0.18em; white-space:nowrap;">// COMMUNITY POSTS //</p>
+  <div style="flex:1; height:1px; background:linear-gradient(90deg, transparent, var(--neon-blue));"></div>
+</div>
+
+<!-- Community Posts -->
+{% if pastes %}
+  {% for paste in pastes %}
+
+  {% if loop.index % 3 == 1 %}
+    {% set accent = '#00ff9f' %}
+    {% set accent_rgba = 'rgba(0,255,159,0.2)' %}
+    {% set accent_bg = 'rgba(0,255,159,0.04)' %}
+  {% elif loop.index % 3 == 2 %}
+    {% set accent = '#ff00aa' %}
+    {% set accent_rgba = 'rgba(255,0,170,0.2)' %}
+    {% set accent_bg = 'rgba(255,0,170,0.04)' %}
+  {% else %}
+    {% set accent = '#ffdd00' %}
+    {% set accent_rgba = 'rgba(255,221,0,0.2)' %}
+    {% set accent_bg = 'rgba(255,221,0,0.04)' %}
+  {% endif %}
+
+  <div style="background:var(--dark-card); border:1px solid {{ accent_rgba }}; border-radius:4px; padding:1.5rem; margin-bottom:1.8rem; position:relative; overflow:hidden;">
+    <div style="position:absolute; top:0; left:0; width:3px; height:100%; background:{{ accent }};"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.7rem; flex-wrap:wrap; gap:0.5rem;">
+      <h3 style="font-family:var(--font-display); font-size:0.95rem; color:{{ accent }}; letter-spacing:0.05em;">{{ paste.title }}</h3>
+      <span style="background:{{ accent_bg }}; color:{{ accent }}; border:1px solid {{ accent_rgba }}; font-family:var(--font-mono); font-size:0.68rem; padding:0.15rem 0.5rem; border-radius:2px; text-transform:uppercase;">{{ paste.language }}</span>
+    </div>
+
+    <p style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-secondary); margin-bottom:1rem;">
+      by <span style="color:{{ accent }};">{{ paste.author.username }}</span>
+    </p>
+
+    <pre style="background:{{ accent_bg }}; border:1px solid {{ accent_rgba }}; border-radius:3px; padding:1rem; font-family:var(--font-mono); font-size:0.82rem; color:var(--text-primary); white-space:pre-wrap; word-wrap:break-word; line-height:1.8; overflow-x:auto;"><code style="background:none; border:none; padding:0; color:inherit; font-family:inherit;">{{ paste.body }}</code></pre>
+
+    <div style="margin-top:1.2rem; padding-top:1.2rem; border-top:1px solid rgba(26,32,64,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem;">
+        <p style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.1em;">Comments</p>
+        {% if current_user.is_authenticated %}
+        <button onclick="toggleCommentBox({{ paste.id }})"
+          style="background:transparent; border:1px solid var(--dark-border); color:var(--text-secondary); font-family:var(--font-mono); font-size:0.68rem; padding:0.2rem 0.6rem; border-radius:3px; cursor:pointer; text-transform:uppercase; transition:all 0.2s;"
+          onmouseover="this.style.borderColor='{{ accent }}';this.style.color='{{ accent }}'"
+          onmouseout="this.style.borderColor='var(--dark-border)';this.style.color='var(--text-secondary)'">+ Reply</button>
+        {% endif %}
+      </div>
+
+      {% if paste.comments %}
+        {% for comment in paste.comments %}
+        <div style="padding:0.5rem 0; border-bottom:1px solid rgba(26,32,64,0.5);">
+          <span style="color:var(--neon-yellow); font-family:var(--font-mono); font-size:0.78rem;">{{ comment.author.username }}</span>
+          <span style="color:var(--text-secondary); font-size:0.7rem; margin-left:0.5rem;">{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+          <span style="color:var(--text-primary); margin-left:0.8rem; font-size:0.9rem;">{{ comment.body }}</span>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p style="font-family:var(--font-mono); font-size:0.78rem; color:var(--text-secondary); font-style:italic;">// no comments yet //</p>
+      {% endif %}
+
+      {% if current_user.is_authenticated %}
+      <form id="comment-box-{{ paste.id }}" class="hidden" method="POST" action="{{ url_for('main.add_comment', paste_id=paste.id) }}" style="margin-top:0.8rem;">
+        <textarea name="comment" rows="2" placeholder="// type your message..." required
+          style="width:100%; background:rgba(10,15,30,0.9); border:1px solid var(--dark-border); border-radius:3px; color:var(--text-primary); font-family:var(--font-mono); font-size:0.85rem; padding:0.6rem 0.8rem; outline:none; resize:vertical; margin-bottom:0.5rem;"
+          onfocus="this.style.borderColor='{{ accent }}'" onblur="this.style.borderColor='var(--dark-border)'"></textarea>
+        <div style="display:flex; gap:0.5rem; justify-content:flex-end;">
+          <button type="submit" style="background:transparent; border:1px solid {{ accent }}; color:{{ accent }}; font-family:var(--font-mono); font-size:0.72rem; padding:0.4rem 1rem; border-radius:3px; cursor:pointer; text-transform:uppercase; letter-spacing:0.08em;">Send</button>
+          <button type="button" onclick="toggleCommentBox({{ paste.id }})" style="background:transparent; border:1px solid var(--text-secondary); color:var(--text-secondary); font-family:var(--font-mono); font-size:0.72rem; padding:0.4rem 1rem; border-radius:3px; cursor:pointer; text-transform:uppercase; letter-spacing:0.08em;">Cancel</button>
+        </div>
+      </form>
+      {% else %}
+      <p style="font-family:var(--font-mono); font-size:0.78rem; color:var(--text-secondary); margin-top:0.5rem;">
+        <a href="{{ url_for('auth.login') }}" style="color:var(--neon-blue);">Login</a> to comment.
+      </p>
+      {% endif %}
+    </div>
+
+    {% if current_user.is_authenticated and current_user.id == paste.user_id %}
+    <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(26,32,64,0.5);">
+      <form method="POST" action="{{ url_for('main.delete_paste', paste_id=paste.id) }}" style="display:inline;">
+        <button type="submit" onclick="return confirm('Delete this post?')"
+          style="background:transparent; border:1px solid rgba(255,0,170,0.25); color:rgba(255,0,170,0.45); font-family:var(--font-mono); font-size:0.7rem; padding:0.3rem 0.8rem; border-radius:3px; cursor:pointer; text-transform:uppercase; transition:all 0.2s;"
+          onmouseover="this.style.borderColor='var(--neon-pink)';this.style.color='var(--neon-pink)'"
+          onmouseout="this.style.borderColor='rgba(255,0,170,0.25)';this.style.color='rgba(255,0,170,0.45)'">Delete</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+{% else %}
+  <div style="text-align:center; padding:4rem 2rem; border:1px dashed var(--dark-border); border-radius:4px;">
+    <p style="font-family:var(--font-mono); color:var(--text-secondary); margin-bottom:0.5rem;">// no posts yet //</p>
+    <p style="font-family:var(--font-mono); color:var(--text-secondary); font-size:0.78rem; opacity:0.6;">be the first to transmit data to the grid</p>
+    {% if current_user.is_authenticated %}
+    <div style="margin-top:1.5rem;">
+      <a href="{{ url_for('main.new_paste') }}" style="display:inline-block; padding:0.7rem 2rem; font-family:var(--font-mono); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.1em; border-radius:3px; text-decoration:none; border:1px solid var(--neon-green); color:var(--neon-green);">Create First Post</a>
+    </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% endblock %}
