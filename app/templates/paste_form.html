@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}CyberBlog — New Post{% endblock %}
+{% block content %}
+
+<div style="max-width: 700px; margin: 2rem auto;">
+  <div style="margin-bottom:2rem;">
+    <p style="font-family:var(--font-mono); font-size:0.75rem; color:var(--neon-blue); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.5rem;">// TRANSMIT NEW DATA //</p>
+    <h1 style="font-family:var(--font-display); font-size:1.6rem; font-weight:900; color:var(--neon-blue); letter-spacing:0.1em;">NEW POST</h1>
+  </div>
+
+  <div class="card">
+    <form method="POST">
+      <div class="form-group">
+        <label for="title">// Post Title</label>
+        <input type="text" id="title" name="title" placeholder="enter post title..." required autofocus>
+      </div>
+      <div class="form-group">
+        <label for="language">// Content Type</label>
+        <select id="language" name="language">
+          <option value="text">text</option>
+          <option value="python">python</option>
+          <option value="javascript">javascript</option>
+          <option value="bash">bash</option>
+          <option value="html">html</option>
+          <option value="sql">sql</option>
+          <option value="markdown">markdown</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="body">// Content</label>
+        <textarea id="body" name="body" rows="10" placeholder="// paste your content here..." required style="min-height:200px;"></textarea>
+      </div>
+      <div style="display:flex; gap:1rem;">
+        <button type="submit" class="btn btn-primary" style="padding:0.8rem 2rem;">TRANSMIT →</button>
+        <a href="{{ url_for('main.index') }}" class="btn btn-secondary" style="padding:0.8rem 2rem;">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

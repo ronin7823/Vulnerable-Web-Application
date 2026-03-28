@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}CyberBlog — Inbox{% endblock %}
+{% block content %}
+<div style="max-width: 600px; margin: 2rem auto;">
+  <p style="font-family:var(--font-mono); font-size:0.75rem; color:var(--neon-blue); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.5rem;">// INBOX //</p>
+  <h1 style="font-family:var(--font-display); font-size:1.4rem; font-weight:900; color:var(--neon-yellow); margin-bottom:2rem;">[ MESSAGES ]</h1>
+  {% if messages %}
+    {% for msg in messages %}
+    <div style="background:var(--dark-card); border:1px solid rgba(0,180,255,0.2); border-radius:4px; padding:1rem; margin-bottom:1rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-family:var(--font-mono); font-size:0.85rem; color:var(--neon-blue);">{{ msg.subject }}</span>
+        <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-secondary);">from: {{ msg.sender.username }}</span>
+      </div>
+      <div style="margin-top:0.8rem;">
+        <a href="{{ url_for('main.view_message', token=tokens[msg.id]) }}"
+           style="font-family:var(--font-mono); font-size:0.75rem; color:var(--neon-pink); text-decoration:none;">
+          READ MESSAGE → 
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p style="font-family:var(--font-mono); color:var(--text-secondary);">// no messages //</p>
+  {% endif %}
+</div>
+{% endblock %}
